@@ -1,0 +1,47 @@
+﻿@{
+    ViewData["Title"] = "Les Équipes";
+}
+
+<div class="text-center">
+    
+    <p><img style="width:500px;" src="./Assets/F1.png" /></p>
+    <h1 class="display-4">Bienvenue</h1>
+    <p>Veuillez choisir une Équipe pour démarrer une nouvelle partie :</p>
+    <div class="container">
+        <div class="row">
+    @foreach (var v in ViewBag.voiture)
+    {
+        <div class="col-sm">
+        <div class="card mb-3" style="max-width: 18rem;background-color: @v.ecurie.colorSite; color: @v.ecurie.colorEcriture ;">
+            <div class="card-header"><img src="@v.ecurie.photo" style="width:100px; background-color: white; margin:5px;" /></div>
+            <div class="card-body">
+                <h3>@v.nomVoiture</h3> <img src="@v.photo" style="width:250px">
+                            <img src="@v.ecurie.Pays.photoDrapeau" style="width: 50px; margin:10px; border: solid gray 2px; border-radius:5px;" /><br />
+                Vitesse de pointe :<div class="progress">
+                    <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: @v.getPourcent(v.vitessePointe)" aria-valuenow="v.vitessePointe" aria-valuemin="0" aria-valuemax="5"></div>
+                </div>
+                Maniabilité :<div class="progress">
+                    <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: @v.getPourcent(v.maniabilite)" aria-valuenow="v.maniabilite" aria-valuemin="0" aria-valuemax="5"></div>
+                </div>
+                Économie d'essence :<div class="progress">
+                    <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: @v.getPourcent(v.economieEssence)" aria-valuenow="@v.economieEssence" aria-valuemin="0" aria-valuemax="5"></div>
+                </div>
+                Économie de pneus :<div class="progress">
+                    <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: @v.getPourcent(v.economiePneus)" aria-valuenow="@v.economiePneus" aria-valuemin="0" aria-valuemax="5"></div>
+                </div>
+                <br />
+                            @{
+                                string nomEcurie = "Choisir : " + v.ecurie.nomEcurie;
+                                string url = "Details";
+                            }
+
+                            @Html.ActionLink(nomEcurie, url, "Equipe" , new {@saisonId= ViewBag.saisonId, @id = v.idVoiture},new { @id = v.idVoiture, @class="btn btn-light"})
+
+            </div>
+        </div>
+        </div>
+    }
+        </div>
+    </div>
+</div>
+

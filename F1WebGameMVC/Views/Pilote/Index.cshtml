@@ -1,0 +1,57 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    <center>
+        @Html.ActionLink("Commencer la saison", "Index", "Calendrier",null, new {@class="btn btn-light", @style="margin: 5px;"})
+
+        <a id="annulerChoixVoiture" class="btn btn-light" style="margin: 5px;">Changer d'équipe</a>
+        @*@Html.ActionLink("Changer d'équipe", "Index", "Equipe",null, new {@class="btn btn-light", @style="margin: 5px;"})*@
+    </center>
+    @foreach (var p in ViewBag.voiture.pilotes)
+    {
+        <center>
+
+            <div class="card mb-3" style="max-width: 18rem; color:@ViewBag.voiture.ecurie.colorEcriture; background-color: @ViewBag.voiture.ecurie.colorSite">
+                <center>
+                    <div class="card-header">@p.nom</div>
+                    <div class="card-body">
+                        <img src="@ViewBag.voiture.ecurie.photo" style="width: 100px; margin:5px;" />
+                        <img src="@p.photo" style="width:250px">
+                        <img src="@p.Pays.photoDrapeau" style="width: 100px;margin:5px; border: solid gray 2px; border-radius:5px;" /><br />
+                        Vitesse de pointe :<div class="progress">
+                            <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: @p.getPourcent(p.vitessePointe)" aria-valuenow="p.vitessePointe" aria-valuemin="0" aria-valuemax="5"></div>
+                        </div>
+                        Prise de virages :<div class="progress">
+                            <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: @p.getPourcent(p.vitesseVirage)" aria-valuenow="p.vitesseVirage" aria-valuemin="0" aria-valuemax="5"></div>
+                        </div>
+                        Économie de pneus :<div class="progress">
+                            <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: @p.getPourcent(p.economiePneus)" aria-valuenow="p.economiePneus" aria-valuemin="0" aria-valuemax="5"></div>
+                        </div>
+                        Économie de l'essence :<div class="progress">
+                            <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: @p.getPourcent(p.economieEssence)" aria-valuenow="p.economieEssence" aria-valuemin="0" aria-valuemax="5"></div>
+                        </div>
+                    </div>
+                </center>
+            </div>
+        </center>
+    }
+}
+<script>
+    $("#annulerChoixVoiture").click(function () {
+        var idVoiture = @ViewBag.voiture.idVoiture
+            console.log(idVoiture)
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("annulerChoixEquipe", "Equipe")',
+        })
+            .done(function () {
+                url = '@Url.Action("Index","Equipe")'
+                window.location.pathname = url
+            })
+            .fail(function (xhr, status, error) {
+                console.log(error)
+                alert("Une erreur est survenue !")
+            })
+    })
+</script>

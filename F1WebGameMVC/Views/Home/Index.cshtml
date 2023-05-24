@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "Nouvelle partie";
+}
+
+<script>
+    $(document).ready(function () {
+        $('#saisons').on('change', function () {
+            var saisonId = $(this).val();
+            $.ajax({
+            type: 'POST',
+            url: '@Url.Action("nouvellePartie", "Home")',
+            data: { saisonId: saisonId }})
+            .done(function(){
+                    var url = "@Url.Action("Index","Equipe")"
+                    console.log(url)
+                window.location.pathname=url
+            })
+            .fail(function (xhr, status, error) {
+                console.log(error)
+                alert("Une erreur est survenue !")
+            })
+        });
+    });
+</script>
+
+<div class="text-center">
+    <p><img style="width:500px;" src="./Assets/F1.png" /></p>
+    <h1 class="display-4">Bienvenue</h1>
+    <p>Veuillez choisir une saison pour démarrer une nouvelle partie :</p>
+    <p>
+        <select name="saisons" id="saisons" class="form-select" aria-label="Veuillez sélectionner une saison pour démarrer." asp-items="@ViewBag.Saisons"></select>
+    </p>
+</div>

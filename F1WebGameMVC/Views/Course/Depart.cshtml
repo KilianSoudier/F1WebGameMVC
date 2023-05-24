@@ -1,0 +1,96 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    <h5>Départ de la course</h5>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm">
+                <p>Probabilité d'abandon : 2%</p>
+                <p>Probabilité de dégats mineurs : 2%</p>
+                <button class="btn btn-light" id="depart">Commencer la course</button>
+                <h5>Pilotes</h5>
+                @foreach (var p in ViewBag.mesPilotes)
+                {
+                    <center>
+
+                        <div class="card mb-3" style="max-width: 18rem; color:@p.Voiture.ecurie.colorEcriture; background-color: @p.Voiture.ecurie.colorSite">
+                            <center>
+                                <div class="card-header">@p.nom</div>
+                                <div class="card-body">
+                                    <img src="@p.Voiture.ecurie.photo" style="width: 100px; margin:5px;" />
+                                    <img src="@p.photo" style="width:100px">
+                                    <img src="@p.Pays.photoDrapeau" style="width: 50px;margin:5px;border: solid gray 2px; border-radius:5px;" /><br />
+                                    Vitesse de pointe :<div class="progress">
+                                        <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: @p.getPourcent(p.vitessePointe)" aria-valuenow="p.vitessePointe" aria-valuemin="0" aria-valuemax="5"></div>
+                                    </div>
+                                    Prise de virages :<div class="progress">
+                                        <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: @p.getPourcent(p.vitesseVirage)" aria-valuenow="p.vitesseVirage" aria-valuemin="0" aria-valuemax="5"></div>
+                                    </div>
+                                    Économie de pneus :<div class="progress">
+                                        <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: @p.getPourcent(p.economiePneus)" aria-valuenow="p.economiePneus" aria-valuemin="0" aria-valuemax="5"></div>
+                                    </div>
+                                    Économie de l'essence :<div class="progress">
+                                        <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: @p.getPourcent(p.economieEssence)" aria-valuenow="p.economieEssence" aria-valuemin="0" aria-valuemax="5"></div>
+                                    </div>
+                                </div>
+                            </center>
+                        </div>
+                    </center>
+                }
+            </div>
+            <div class="col-sm">
+                <div class="col-sm">
+                    <h5>Classement détaillé</h5>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Place</th>
+                                <th scope="col">Pilote</th>
+                                <th scope="col">Temps du dernier tour</th>
+                                <th scope="col">Écart avec le pilote devant</th>
+                                <th scope="col">Pneus</th>
+                                <th scope="col">Usure des pneus</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int cpt = 1;
+                            }
+
+                            @foreach (var t in @ViewBag.tours)
+                            {
+                                <tr>
+                                    <th scope="row">@cpt</th>
+                                    <td>@t.Pilote.nom</td>
+                                    <td id="tempsTour">N.C.</td>
+                                    <td id="ecartPilote">N.C.</td>
+                                    <td id="pneus"><img src="@t.pneus.photo" style="width: 50px"/></td>
+                                    <td id="usurePneus">0%</td>
+                                </tr>
+                                cpt++;
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script>
+    $("#depart").click(function() {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("depart", "Course")',
+            data: {
+                
+            }
+        })
+            .done(function (resp) {
+                console.log(resp)
+            })
+            .fail(function (xhr, status, error) {
+                alert("Une erreur est survenue !")
+            })
+    })
+</script>

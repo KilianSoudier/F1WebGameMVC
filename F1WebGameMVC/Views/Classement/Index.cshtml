@@ -1,0 +1,27 @@
+﻿@{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Nationalité</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Équipe</th>
+                <th scope="col">NbPoints</th>
+                @foreach (var c in ViewBag.circuit)
+                {
+                    <th scope="col"><img src="@c.Pays.photoDrapeau" style="width:20px;border: solid gray 2px; border-radius:5px;" /></th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var p in ViewBag.pilote)
+            {                
+                <tr>
+                    <td><img src="@p.pilote.Pays.photoDrapeau" style="width:50px; border: solid gray 2px; border-radius:5px;" /></td>
+                    <td>@p.pilote.nom</td>
+                    <td><img src="@p.pilote.Voiture.ecurie.photo" style="width:50px;" /></td>
+                    <td>@p.pointsPilotes</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

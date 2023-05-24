@@ -1,0 +1,69 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    <center>
+    <div class="card mb-3" style="max-width: 18rem;background-color: @ViewBag.voiture.ecurie.colorSite; color: @ViewBag.voiture.ecurie.colorEcriture ;">
+            <div class="card-header"><center><img src="@ViewBag.voiture.ecurie.photo" style="width:100px; background-color: white; margin:5px;" /></center></div>
+            <div class="card-body">
+                <h3>@ViewBag.voiture.nomVoiture</h3><img src="@ViewBag.voiture.ecurie.Pays.photoDrapeau" style="width:50px;border: solid gray 2px; border-radius:5px;" /> <img src="@ViewBag.voiture.photo" style="width:250px">
+                
+                Vitesse de pointe :<div class="progress">
+                <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: @ViewBag.voiture.getPourcent(ViewBag.voiture.vitessePointe)" aria-valuenow="@ViewBag.voiture.vitessePointe" aria-valuemin="0" aria-valuemax="5"></div>
+                </div>
+                Maniabilité :<div class="progress">
+                <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: @ViewBag.voiture.getPourcent(ViewBag.voiture.maniabilite)" aria-valuenow="@ViewBag.voiture.maniabilite" aria-valuemin="0" aria-valuemax="5"></div>
+                </div>
+                Économie d'essence :<div class="progress">
+                <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: @ViewBag.voiture.getPourcent(ViewBag.voiture.economieEssence)" aria-valuenow="@ViewBag.voiture.economieEssence" aria-valuemin="0" aria-valuemax="5"></div>
+                </div>
+                Économie de pneus :<div class="progress">
+                <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: @ViewBag.voiture.getPourcent(ViewBag.voiture.economiePneus)" aria-valuenow="@ViewBag.voiture.economiePneus" aria-valuemin="0" aria-valuemax="5"></div>
+                </div>
+                <hr style="color: white">
+                
+                <a id="choixVoiture" class="btn btn-light" style="margin: 5px">Voir les détails des pilotes</a>
+                
+                <a id="annulerChoixVoiture" class= "btn btn-light" style="margin: 5px;">Annuler</a>
+
+            </div>
+        </div>
+    </center>
+    <script>
+        $("#choixVoiture").click(function(){
+            var idVoiture = @ViewBag.voiture.idVoiture
+            console.log(idVoiture)
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("enregistrerChoixVoiture", "Equipe")',
+                data: { idVoiture: idVoiture}
+            })
+                .done(function () {
+                    url = '@Url.Action("Index","Pilote")'
+                    window.location.pathname = url
+                })
+                .fail(function (xhr, status, error) {
+                    console.log(error)
+                    alert("Une erreur est survenue !")
+                })
+        })
+        $("#annulerChoixVoiture").click(function () {
+            var idVoiture = @ViewBag.voiture.idVoiture
+                console.log(idVoiture)
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("annulerChoixEquipe", "Equipe")',
+                //data: { }
+            })
+                .done(function () {
+                    url = '@Url.Action("Index","Equipe")'
+                    window.location.pathname = url
+                })
+                .fail(function (xhr, status, error) {
+                    console.log(error)
+                    alert("Une erreur est survenue !")
+                })
+        })
+    </script>
+
+}

@@ -1,0 +1,41 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<center><h4>Calendrier</h4>
+    @Html.ActionLink("Poursuivre vers le classement", "Index", "Classement",null, new {@class="btn btn-light", @style="margin: 5px;"})
+</center>
+@foreach(var c in ViewBag.Circuits)
+{
+    <div class="container">
+        <div class="row">
+            <center>
+            <div class="col card bg-light mb-3" style="max-width: 25rem;">
+                <div class="card-header">@c.nom</div>
+                <div class="card-body">
+                    <h5 class="card-title">Grand Prix de @c.Pays.libelle</h5>
+                        <img src="@c.Pays.photoDrapeau" style="width: 100px;border: solid gray 2px; border-radius:5px;" />
+                    <img src="@c.photo" style="width: 250px"/>
+                    <p class="card-text">Nombre de Tours : @c.nbTours</p>
+                    <p class ="card-text">Distance d'un tour : @c.distanceTour km</p>
+                    <p class="card-text">Record du tour : @c.recordTour.ToString(@"mm\:ss\:fff") </p>
+                    <p>Date du premier GP : @c.premierGP.ToString("dd/MM/yyyy")</p>
+                    Vitesse de pointe nécessaire:<div class="progress">
+                        <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: @c.getPourcent(c.ligneDroite)" aria-valuenow="c.ligneDroite" aria-valuemin="0" aria-valuemax="5"></div>
+                    </div>
+                    Maniabilité nécessaire:<div class="progress">
+                        <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: @c.getPourcent(c.virages)" aria-valuenow="c.virages" aria-valuemin="0" aria-valuemax="5"></div>
+                    </div>
+                    Usure des pneus :<div class="progress">
+                        <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: @c.getPourcent(c.usurePneus)" aria-valuenow="c.usurePneus" aria-valuemin="0" aria-valuemax="5"></div>
+                    </div>
+                    Usure Essence :<div class="progress">
+                        <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: @c.getPourcent(c.usureEssence)" aria-valuenow="c.usureEssence" aria-valuemin="0" aria-valuemax="5"></div>
+                    </div>
+                </div>
+            </div>
+            </center>
+        </div>
+    </div>
+}

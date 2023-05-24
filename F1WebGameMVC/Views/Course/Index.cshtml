@@ -1,0 +1,167 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    <div class="container">
+        <div class="row">
+            <div class="col-sm">
+                <center>
+                    <h5>@ViewBag.course.Name</h5>
+                    <div class="card" style="width: 18rem;">
+                        <img class="card-img-top" src="@ViewBag.circuit.photo" alt="Card image cap">
+                        <div class="card-body">
+                            <img src="@ViewBag.circuit.Pays.photoDrapeau" style="width:50px; border: solid gray 2px; border-radius: 10px" />
+                            <h5 class="card-title">@ViewBag.circuit.nom</h5>
+                            <p class="card-text">Détails du circuit :</p>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Nombre de Tours : @ViewBag.circuit.nbTours</li>
+                            <li class="list-group-item">Distance d'un tour : @ViewBag.circuit.distanceTour km</li>
+                            <li class="list-group-item">Record du tour : @ViewBag.circuit.recordTour.ToString(@"mm\:ss\:fff")</li>
+                            <li class="list-group-item">Date du premier GP : @ViewBag.circuit.premierGP.ToString("dd/MM/yyyy")</li>
+                            <li class="list-group-item">
+                                Vitesse de pointe nécessaire:<div class="progress">
+                                    <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: @ViewBag.circuit.getPourcent(@ViewBag.circuit.ligneDroite)" aria-valuenow="@ViewBag.circuit.ligneDroite" aria-valuemin="0" aria-valuemax="5"></div>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                Maniabilité nécessaire:<div class="progress">
+                                    <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: @ViewBag.circuit.getPourcent(@ViewBag.circuit.virages)" aria-valuenow="@ViewBag.circuit.virages" aria-valuemin="0" aria-valuemax="5"></div>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                Usure des pneus :<div class="progress">
+                                    <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: @ViewBag.circuit.getPourcent(@ViewBag.circuit.usurePneus)" aria-valuenow="@ViewBag.circuit.usurePneus" aria-valuemin="0" aria-valuemax="5"></div>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                Usure Essence :<div class="progress">
+                                    <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: @ViewBag.circuit.getPourcent(@ViewBag.circuit.usureEssence)" aria-valuenow="@ViewBag.circuit.usureEssence" aria-valuemin="0" aria-valuemax="5"></div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </center>
+            </div>
+            <div class="col-sm">
+                <h5>Pilotes</h5>
+                @foreach (var p in ViewBag.mesPilotes)
+                {
+                    <center>
+
+                        <div class="card mb-3" style="max-width: 18rem; color:@ViewBag.voiture.ecurie.colorEcriture; background-color: @ViewBag.voiture.ecurie.colorSite">
+                            <center>
+                                <div class="card-header">@p.nom</div>
+                                <div class="card-body">
+                                    <img src="@ViewBag.voiture.ecurie.photo" style="width: 100px; margin:5px;" />
+                                    <img src="@p.photo" style="width:100px">
+                                    <img src="@p.Pays.photoDrapeau" style="width: 50px;margin:5px;border: solid gray 2px; border-radius:5px;" /><br />
+                                    Vitesse de pointe :<div class="progress">
+                                        <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: @p.getPourcent(p.vitessePointe)" aria-valuenow="p.vitessePointe" aria-valuemin="0" aria-valuemax="5"></div>
+                                    </div>
+                                    Prise de virages :<div class="progress">
+                                        <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: @p.getPourcent(p.vitesseVirage)" aria-valuenow="p.vitesseVirage" aria-valuemin="0" aria-valuemax="5"></div>
+                                    </div>
+                                    Économie de pneus :<div class="progress">
+                                        <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: @p.getPourcent(p.economiePneus)" aria-valuenow="p.economiePneus" aria-valuemin="0" aria-valuemax="5"></div>
+                                    </div>
+                                    Économie de l'essence :<div class="progress">
+                                        <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: @p.getPourcent(p.economieEssence)" aria-valuenow="p.economieEssence" aria-valuemin="0" aria-valuemax="5"></div>
+                                    </div>
+                                    <div class="choixPneus" id="choisirPneus-@p.idPilote">
+                                        Choisissez un type de pneu pour commencer :<br />
+                                        <table>
+                                            @foreach (var pneu in @ViewBag.pneus)
+                                            {
+                                                <tr idPilote="@p.idPilote" onclick="choixPneus(event)" id="choixPneu"><td style="margin: 1px;"><img src="@pneu.photo" id="@pneu.Id" style="width:50px;" /></td><td style="margin: 1px;"><label id="@pneu.Id" for="unPneu">Pneu : @pneu.Name</label></td></tr>
+                                            }
+                                        </table>
+                                    </div>
+                                </div>
+                            </center>
+                        </div>
+                    </center>
+                }
+
+            </div>
+            <div class="col-sm">
+                <h5>Classement détaillé</h5>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Place</th>
+                            <th scope="col">Pilote</th>
+                            <th scope="col">Temps du dernier tour</th>
+                            <th scope="col">Écart avec le pilote devant</th>
+                            <th scope="col">Pneus</th>
+                            <th scope="col">Usure des pneus</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int cpt = 1;
+                        }
+
+                        @foreach (var p in @ViewBag.pilotes)
+                        {
+                            <tr>
+                                <th scope="row">@cpt</th>
+                                <td>@p.nom</td>
+                                <td id="tempsTour">N.C.</td>
+                                <td id="ecartPilote">N.C.</td>
+                                <td id="pneus"></td>
+                                <td id="usurePneus">0%</td>
+                            </tr>
+                            cpt++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+}
+
+<script>
+    $(document).ready(function (){
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("verifPneusChoisis", "Course")',
+            data: {
+                idCourse: @ViewBag.course.idCourse,
+            }
+        })
+            .done(function (response) {
+                if(response== true){
+                    $(".choixPneus").remove()
+                }
+            })
+            .fail(function (xhr, status, error) {
+                alert("Une erreur est survenue !")
+            })
+    })
+    function choixPneus(event) {
+        let idPneu = event.target.id
+        let idPilote = event.target.parentElement.parentElement.attributes[0].value
+        console.log(idPneu)
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("choixPneusJoueur", "Course")',
+            data: {
+                idPneu: idPneu,
+                idPilote: idPilote,
+                idCourse: @ViewBag.course.idCourse,
+            }
+        })
+            .done(function (resp) {
+                $("#choixPneu").hide()
+                if(resp == true){
+                    let url = '@Url.Action("Depart","Course")'
+                    window.location.pathname = url
+                }
+            })
+            .fail(function (xhr, status, error) {
+                alert("Une erreur est survenue !")
+            })
+    }
+</script>
